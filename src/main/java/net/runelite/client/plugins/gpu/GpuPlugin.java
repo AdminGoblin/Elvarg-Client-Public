@@ -384,10 +384,10 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 
 				textureArrayId = -1;
 
-				if (client.getGameState() == GameState.LOGGED_IN)
-				{
+				//if (client.getGameState() == GameState.LOGGED_IN)
+				//{
 					uploadScene();
-				}
+				//}
 
 				checkGLErrors();
 			}
@@ -821,6 +821,21 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 		uniformBuf.clear();
 
 		checkGLErrors();
+
+		System.out.println("==============================================");
+		System.out.println("YAW: " + yaw);
+		System.out.println("pitch: " + pitch);
+		System.out.println("viewportOffsetX: " + viewportOffsetX);
+		System.out.println("viewportOffsetY: " + viewportOffsetY);
+		System.out.println("getDrawDistance: " + getDrawDistance());
+		System.out.println("cameraX: " + cameraX);
+		System.out.println("cameraY: " + cameraY);
+		System.out.println("cameraZ: " + cameraZ);
+		System.out.println("getScale: " + client.getScale());
+		System.out.println("getCenterX: " + client.getCenterX());
+		System.out.println("getCenterY: " + client.getCenterY());
+		System.out.println("==============================================");
+
 	}
 
 	@Override
@@ -1181,11 +1196,11 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 			GL43C.glUniform1f(uniSmoothBanding, config.smoothBanding() ? 0f : 1f);
 			GL43C.glUniform1i(uniColorBlindMode, config.colorBlindMode().ordinal());
 			GL43C.glUniform1f(uniTextureLightMode, config.brightTextures() ? 1f : 0f);
-			if (gameState == GameState.LOGGED_IN)
-			{
+			//if (gameState == GameState.LOGGED_IN)
+			//{
 				// avoid textures animating during loading
 				GL43C.glUniform1i(uniTick, client.getGameCycle());
-			}
+			//}
 
 			// Calculate projection matrix
 			float[] projectionMatrix = Mat4.scale(client.getScale(), client.getScale(), 1);
@@ -1402,19 +1417,8 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 	@Subscribe
 	public void onGameStateChanged(GameStateChanged gameStateChanged)
 	{
-		switch (gameStateChanged.getGameState())
-		{
-			case LOGGED_IN:
-				if (computeMode != ComputeMode.NONE)
-				{
-					this.uploadScene();
-					checkGLErrors();
-				}
-				break;
-			case LOGIN_SCREEN:
-				// Avoid drawing the last frame's buffer during LOADING after LOGIN_SCREEN
-				targetBufferOffset = 0;
-		}
+		this.uploadScene();
+		checkGLErrors();
 	}
 
 	private void uploadScene()

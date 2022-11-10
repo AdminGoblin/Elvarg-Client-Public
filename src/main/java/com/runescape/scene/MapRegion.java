@@ -1,6 +1,7 @@
 package com.runescape.scene;
 
 import com.runescape.Client;
+import com.runescape.cache.ResourceProvider;
 import com.runescape.cache.def.FloorDefinition;
 import com.runescape.cache.def.ObjectDefinition;
 import com.runescape.draw.Rasterizer3D;
@@ -46,6 +47,26 @@ public final class MapRegion {
         regionSizeY = 104;
         this.tileHeights = tileHeights;
         this.tileFlags = fileFlags;
+        underlays = new byte[4][regionSizeX][regionSizeY];
+        overlays = new byte[4][regionSizeX][regionSizeY];
+        overlayTypes = new byte[4][regionSizeX][regionSizeY];
+        overlayOrientations = new byte[4][regionSizeX][regionSizeY];
+        anIntArrayArrayArray135 = new int[4][regionSizeX + 1][regionSizeY + 1];
+        shading = new byte[4][regionSizeX + 1][regionSizeY + 1];
+        tileLighting = new int[regionSizeX + 1][regionSizeY + 1];
+        hues = new int[regionSizeY];
+        saturations = new int[regionSizeY];
+        luminances = new int[regionSizeY];
+        chromas = new int[regionSizeY];
+        anIntArray128 = new int[regionSizeY];
+    }
+
+    public MapRegion(byte fileFlags[][][], int tileHeights[][][], int regionSizeX, int regionSizeY) {
+        maximumPlane = 99;
+        this.regionSizeX = regionSizeX;
+        this.regionSizeY = regionSizeY;
+        this.tileHeights = tileHeights;
+        tileFlags = fileFlags;
         underlays = new byte[4][regionSizeX][regionSizeY];
         overlays = new byte[4][regionSizeX][regionSizeY];
         overlayTypes = new byte[4][regionSizeX][regionSizeY];
@@ -1319,6 +1340,37 @@ public final class MapRegion {
             }
             worldController.addWallDecoration(key, regionY, rotation, k1, 0, l2, ((Renderable) (obj10)), regionX, byte1, 0,
                     768);
+        }
+    }
+
+    public static void requestModelPreload(byte[] is, ResourceProvider rp) {
+        label0: {
+            Buffer stream = new Buffer(is);
+            int l = -1;
+            do {
+                int i1 = stream.readUSmart();
+                if (i1 == 0)
+                    break label0;
+                l += i1;
+                int j1 = 0;
+                do {
+                    int k1 = stream.readUSmart();
+                    if (k1 == 0)
+                        break;
+                    j1 += k1 - 1;
+                    int l1 = j1 & 0x3f;
+                    int i2 = j1 >> 6 & 0x3f;
+                    int j2 = j1 >> 12;
+                    int k2 = stream.readUnsignedByte();
+                    int l2 = k2 >> 2;
+                    int i3 = k2 & 3;
+                    int l3 = j2;
+                    ObjectDefinition class46 = ObjectDefinition.lookup(l);
+                    class46.method579();
+
+
+                } while (true);
+            } while (true);
         }
     }
 

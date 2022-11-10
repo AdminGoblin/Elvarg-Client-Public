@@ -57,6 +57,23 @@ public final class SceneGraph implements RSScene {
         initToNull();
     }
 
+    public SceneGraph(int heightMap[][][], int regionSizeX, int regionSizeY) {
+        int yLocSize = regionSizeX;// was parameter
+        int xLocSize = regionSizeY;// was parameter
+        int zLocSize = 4;// was parameter
+        gameObjectsCache = new GameObject[5000];
+        anIntArray486 = new int[10000];
+        anIntArray487 = new int[10000];
+        maxY = zLocSize;
+        maxX = xLocSize;
+        maxZ = yLocSize;
+        tileArray = new Tile[zLocSize][xLocSize][yLocSize];
+        anIntArrayArrayArray445 = new int[zLocSize][xLocSize + 1][yLocSize + 1];
+        this.heightMap = heightMap;
+        initToNull();
+    }
+
+
     /**
      * The class destructor.
      */
@@ -1086,6 +1103,8 @@ public final class SceneGraph implements RSScene {
         final DrawCallbacks drawCallbacks = Client.instance.getDrawCallbacks();
         if (drawCallbacks != null)
         {
+            Client.instance.setCameraPitch(camAngleZ);
+            Client.instance.setCameraYaw(camAngleXY);
             Client.instance.getDrawCallbacks().drawScene(cameraXPos, cameraZPos, cameraYPos, camAngleZ, camAngleXY, planeZ);
         }
 
@@ -2701,7 +2720,7 @@ public final class SceneGraph implements RSScene {
     private final int maxZ;
     private final int[][][] heightMap;
     private final Tile[][][] tileArray;
-    private int minLevel;
+    public int minLevel;
     private int interactableObjectCacheCurrPos;
     private final GameObject[] gameObjectsCache;
     private final int[][][] anIntArrayArrayArray445;

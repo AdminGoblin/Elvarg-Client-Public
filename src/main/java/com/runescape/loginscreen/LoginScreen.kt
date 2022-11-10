@@ -42,14 +42,15 @@ class LoginScreen(val client : Client) {
         val centerY = GameEngine.canvasHeight / 2
         val alpha = if (Client.preferences.loginBackground != LoginBackground.FADING_BACKGROUNDS) 225 else opacity
         handleBackgrounds()
-        if (backgroundSprite != -1) {
-            ImageCache.get(backgroundSprite).drawAdvancedSprite(centerX - (766 / 2),centerY - (503 / 2),alpha)
+        if (Client.preferences.loginBackground != LoginBackground.ANIMATED_GAME_WORLD) {
+            if (backgroundSprite != -1) {
+                ImageCache.get(backgroundSprite).drawAdvancedSprite(centerX - (766 / 2),centerY - (503 / 2),alpha)
+            }
+            Client.loginScreenRunesAnimation.draw(centerX - (766 / 2) -22, Client.tick)
+            Client.loginScreenRunesAnimation.draw(centerX - (766 / 2) + (766 - 110), Client.tick)
         }
         ImageCache.get(0).drawSprite(centerX - (444 / 2),centerY - (503 / 2) + 17)
         ImageCache.get(1).drawSprite(centerX - (360 / 2),centerY - (200 / 2) + 21)
-
-        Client.loginScreenRunesAnimation.draw(centerX - (766 / 2) -22, Client.tick)
-        Client.loginScreenRunesAnimation.draw(centerX - (766 / 2) + (766 - 110), Client.tick)
 
         val loginBoxX = centerX - (360 / 2)
         val loginBoxY = centerY - (200 / 2) + 21
@@ -277,7 +278,7 @@ class LoginScreen(val client : Client) {
                     }
                 }
             }
-            LoginBackground.ANIMATED_GAME_WORLD -> { println("TO DO") }
+            LoginBackground.ANIMATED_GAME_WORLD -> { Client.instance.cinematicScene.render(); }
             else -> {}
         }
     }

@@ -43,6 +43,7 @@ import com.runescape.io.PacketSender;
 import com.runescape.loginscreen.LoginBackground;
 import com.runescape.loginscreen.LoginScreen;
 import com.runescape.loginscreen.LoginState;
+import com.runescape.loginscreen.cinematic.CinematicScene;
 import com.runescape.loginscreen.flames.FlameManager;
 import com.runescape.model.ChatCrown;
 import com.runescape.model.ChatMessage;
@@ -922,6 +923,7 @@ public class Client extends GameEngine implements RSClient {
             }
             SceneGraph.buildVisibilityMap(500, 800, instance.getViewportWidth(), instance.getViewportHeight(), ai);
         }
+        instance.cinematicScene.resizeFade();
 
     }
 
@@ -4139,6 +4141,8 @@ public class Client extends GameEngine implements RSClient {
         processOnDemandQueue();
     }
 
+    public CinematicScene cinematicScene;
+
     protected void startUp() {
         setGameState(GameState.STARTING);
 
@@ -4284,6 +4288,10 @@ public class Client extends GameEngine implements RSClient {
             ItemDefinition.init(configArchive);
             ItemDefinition.isMembers = isMembers;
             drawLoadingText(95, "Unpacking interfaces");
+
+            cinematicScene = new CinematicScene(this);
+            cinematicScene.prepareLoginScene();
+
             GameFont gameFonts[] = {smallText, regularText, boldText, gameFont};
             Widget.load(interfaceArchive, gameFonts, mediaArchive, new RSFont[]{newSmallFont, newRegularFont, newBoldFont, newFancyFont});
             drawLoadingText(100, "Preparing game engine");
@@ -4339,7 +4347,7 @@ public class Client extends GameEngine implements RSClient {
             Rasterizer3D.setBrightness(preferences.getBrightnessState());
             secondLoginMessage = "Enter your username/email & password.";
             setGameState(GameState.LOGIN_SCREEN);
-            
+            gameLoaded = true;
             return;
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -4355,6 +4363,35 @@ public class Client extends GameEngine implements RSClient {
         while (CRCs[CRCs.length - 1] == 0) {
             drawLoadingText(0, "Connecting to update-server...");
         }
+    }
+
+    public static boolean gameLoaded;
+
+    public void processLoginOnDemandQueue() {
+        do {
+            Resource resource;
+            do {
+                resource = resourceProvider.next();
+                if (resource == null)
+                    return;
+                if (resource.dataType == 0) {
+                    Model.loadModel(resource.buffer, resource.ID);
+                    if (backDialogueId != -1)
+                        updateChatbox = true;
+                }
+                if (resource.dataType == 1) {
+                    Frame.load(resource.ID, resource.buffer);
+                }
+                if (resource.dataType == 2 && resource.ID == nextSong
+                        && resource.buffer != null)
+                    saveMidi(fadeMusic, resource.buffer);
+                if (resource.dataType == 3) {
+                    cinematicScene.provideMap(resource);
+                }
+            } while (resource.dataType != 93
+                    || !resourceProvider.landscapePresent(resource.ID));
+            //  MapRegion.passiveRequestGameObjectModels(new Buffer(resource.buffer), resourceProvider);
+        } while (true);
     }
     
     public FileArchive createArchive(int file, String displayedName, String name, int x) {
@@ -5021,8 +5058,7 @@ public class Client extends GameEngine implements RSClient {
 
     private void mainGameProcessor() {
         callbacks.tick();
-        callbacks.post(new ClientTick());
-       
+
         if (systemUpdateTime > 1) {
             systemUpdateTime--;
         }
@@ -15712,6 +15748,10 @@ public class Client extends GameEngine implements RSClient {
     @Override
     public int getCameraYaw() {
         return xCameraCurve;
+    }
+
+    public void setCameraYaw(int cameraPitch) {
+        xCameraCurve = cameraPitch;
     }
 
     @Override

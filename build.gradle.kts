@@ -19,10 +19,15 @@ val localGitCommit: String = try {
     "n/a"
 }
 
+javafx {
+    modules("javafx.base")
+}
+
 plugins {
     id("java")
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("org.ajoberstar.grgit") version "4.1.0"
+    id("org.openjfx.javafxplugin") version "0.0.13"
     kotlin("jvm") version "1.3.72"
     kotlin("plugin.lombok") version "1.5.21"
     application
