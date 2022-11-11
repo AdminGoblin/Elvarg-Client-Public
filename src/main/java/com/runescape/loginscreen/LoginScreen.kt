@@ -44,12 +44,12 @@ class LoginScreen(val client : Client) {
         handleBackgrounds()
         if (Client.preferences.loginBackground != LoginBackground.ANIMATED_GAME_WORLD) {
             if (backgroundSprite != -1) {
-                ImageCache.get(backgroundSprite).drawAdvancedSprite(centerX - (766 / 2),centerY - (503 / 2),alpha)
+                ImageCache.get(backgroundSprite).drawAdvancedSprite(centerX - (GameEngine.canvasWidth / 2),centerY - (GameEngine.canvasHeight / 2),alpha)
             }
-            Client.loginScreenRunesAnimation.draw(centerX - (766 / 2) -22, Client.tick)
-            Client.loginScreenRunesAnimation.draw(centerX - (766 / 2) + (766 - 110), Client.tick)
+            Client.loginScreenRunesAnimation.draw(centerX - (GameEngine.canvasWidth / 2) -22, Client.tick)
+            Client.loginScreenRunesAnimation.draw(centerX - (GameEngine.canvasWidth / 2) + (GameEngine.canvasWidth - 110), Client.tick)
         }
-        ImageCache.get(0).drawSprite(centerX - (444 / 2),centerY - (503 / 2) + 17)
+        ImageCache.get(0).drawAdvancedSprite(centerX - (444 / 2),centerY - (GameEngine.canvasHeight / 2) + 17)
         ImageCache.get(1).drawSprite(centerX - (360 / 2),centerY - (200 / 2) + 21)
 
         val loginBoxX = centerX - (360 / 2)
@@ -105,26 +105,26 @@ class LoginScreen(val client : Client) {
                     loginBoxX + 123 + 20, loginBoxY + 98,
                     0xFFFFFF, 1
                 )
-                ImageCache.get(if(!Client.preferences.rememberUsername) 21 else 23).drawHoverSprite(loginBoxX + 63,loginBoxX + 107 - 31,ImageCache.get(if(!Client.preferences.rememberUsername) 22 else 24))
+                ImageCache.get(if(!Client.preferences.rememberUsername) 21 else 23).drawHoverSprite(loginBoxX + 63,loginBoxY + 107,ImageCache.get(if(!Client.preferences.rememberUsername) 22 else 24))
                 ImageCache.get(if(!Client.preferences.hiddenUsername) 21 else 23).drawHoverSprite(loginBoxX + 204,loginBoxY + 107,ImageCache.get(if(!Client.preferences.hiddenUsername) 22 else 24))
 
                 client.newSmallFont.drawBasicString(
                     "Remember Username",
-                    loginBoxX + 63 + 22, loginBoxX + 107 - 18,
+                    loginBoxX + 63 + 22, loginBoxY + 119,
                     0xFFFF00, 1
                 )
 
                 client.newSmallFont.drawBasicString(
                     "Hide Username",
-                    loginBoxX + 204 + 22, loginBoxX + 107 - 18,
+                    loginBoxX + 204 + 22, loginBoxY + 119,
                     0xFFFF00, 1
                 )
 
                 ImageCache.get(if(Client.preferences.enableMusic) 25 else 26).drawAdvancedSprite(GameEngine.canvasWidth - 38 - 5,GameEngine.canvasHeight - 45 + 7)
                 if(WorldManager.loadedWorlds) {
-                    ImageCache.get(3).drawAdvancedSprite(centerX - (766 / 2) + 5,GameEngine.canvasHeight - 45 + 8)
-                    client.newBoldFont.drawCenteredString("World: ${WorldManager.selectedWorld?.name}", centerX - (766 / 2) + 5 + (100 / 2),GameEngine.canvasHeight - 45 + 23,0xFFFFFF,1)
-                    client.newSmallFont.drawCenteredString(WorldManager.worldStatusText, centerX - (766 / 2) + 5 + (100 / 2),GameEngine.canvasHeight - 45 + 38,0xFFFFFF,1)
+                    ImageCache.get(3).drawAdvancedSprite(centerX - (GameEngine.canvasWidth / 2) + 5,GameEngine.canvasHeight - 45 + 8)
+                    client.newBoldFont.drawCenteredString("World: ${WorldManager.selectedWorld?.name}", centerX - (GameEngine.canvasWidth / 2) + 5 + (100 / 2),GameEngine.canvasHeight - 45 + 23,0xFFFFFF,1)
+                    client.newSmallFont.drawCenteredString(WorldManager.worldStatusText, centerX - (GameEngine.canvasWidth / 2) + 5 + (100 / 2),GameEngine.canvasHeight - 45 + 38,0xFFFFFF,1)
 
                 }
 
@@ -179,7 +179,7 @@ class LoginScreen(val client : Client) {
                     }
                 }
 
-                if(client.newclickInRegion(centerX - (766 / 2) + 5,GameEngine.canvasHeight - 45 + 8,ImageCache.get(3))) {
+                if(client.newclickInRegion(centerX - (GameEngine.canvasWidth / 2) + 5,GameEngine.canvasHeight - 45 + 8,ImageCache.get(3))) {
                     openWorldSectionScreen(true)
                 }
 
@@ -195,7 +195,7 @@ class LoginScreen(val client : Client) {
                     Client.preferences.enableMusic = !Client.preferences.enableMusic
                 }
 
-                if(client.newclickInRegion(loginBoxX + 63,loginBoxX + 107 - 31,ImageCache.get(21))) {
+                if(client.newclickInRegion(loginBoxX + 63,loginBoxY + 107,ImageCache.get(21))) {
                     Client.preferences.rememberUsername = !Client.preferences.rememberUsername
                 }
 

@@ -546,7 +546,7 @@ public class HdPlugin extends Plugin implements DrawCallbacks
 				modelOverrideManager.startUp();
 				modelPusher.startUp();
 
-				if (client.getGameState() == GameState.LOGGED_IN)
+				if (client.getGameState() == GameState.LOGGED_IN || client.getGameState2() == GameState.LOGIN_SCREEN_ANIMATED || client.getGameState2() == GameState.LOGIN_SCREEN_ANIMATED)
 				{
 					uploadScene();
 				}
@@ -1637,7 +1637,7 @@ public class HdPlugin extends Plugin implements DrawCallbacks
 
 		// Draw 3d scene
 		final TextureProvider textureProvider = client.getTextureProvider();
-		if (textureProvider != null && client.getGameState().getState() >= GameState.LOADING.getState())
+		if (true)
 		{
 			// lazy init textures as they may not be loaded at plugin start.
 			textureManager.ensureTexturesLoaded(textureProvider);
@@ -2132,6 +2132,7 @@ public class HdPlugin extends Plugin implements DrawCallbacks
 				}
 				break;
 			case LOGGED_IN:
+			case LOGIN_SCREEN_ANIMATED:
 				uploadScene();
 				checkGLErrors();
 				break;
@@ -2799,7 +2800,7 @@ public class HdPlugin extends Plugin implements DrawCallbacks
 			uploadScene();
 		}
 
-		if (!hasLoggedIn && client.getGameState() == GameState.LOGGED_IN)
+		if (!hasLoggedIn && client.getGameState() == GameState.LOGGED_IN || client.getGameState2() == GameState.LOGIN_SCREEN_ANIMATED)
 		{
 			hasLoggedIn = true;
 		}

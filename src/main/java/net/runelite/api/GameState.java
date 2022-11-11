@@ -71,7 +71,11 @@ public enum GameState
 	/**
 	 * A world hop is taking place.
 	 */
-	HOPPING(45);
+	HOPPING(45),
+
+
+
+	LOGIN_SCREEN_ANIMATED(455);
 
 	private static final Map<Integer, GameState> stateValueMap =
 		Arrays.stream(GameState.values())

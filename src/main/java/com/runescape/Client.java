@@ -690,7 +690,7 @@ public class Client extends GameEngine implements RSClient {
     private int minimapRotation;
     private String promptInput;
     private int anInt1213;
-    private int[][][] tileHeights;
+    public int[][][] tileHeights;
     private long serverSeed;
     public int loginScreenCursorPos;
     private long aLong1220;
@@ -698,7 +698,7 @@ public class Client extends GameEngine implements RSClient {
     public int inputDialogState;
     private int nextSong;
     private boolean fadeMusic;
-    private CollisionMap[] collisionMaps;
+    public CollisionMap[] collisionMaps;
     private int[] mapCoordinates;
     private int[] terrainIndices;
     private int[] objectIndices;
@@ -717,7 +717,7 @@ public class Client extends GameEngine implements RSClient {
     private int anInt1253;
     private boolean welcomeScreenRaised;
     public boolean messagePromptRaised;
-    private byte[][][] tileFlags;
+    public byte[][][] tileFlags;
     private int prevSong;
     private int destinationX;
     private int destinationY;
@@ -15640,6 +15640,14 @@ public class Client extends GameEngine implements RSClient {
         return GameState.of(gameState);
     }
 
+
+    GameState gameState2 = GameState.LOGIN_SCREEN;
+
+    @Override
+    public GameState getGameState2() {
+        return gameState2;
+    }
+
     @Override
     public int getRSGameState() {
         return gameState;
@@ -15674,6 +15682,16 @@ public class Client extends GameEngine implements RSClient {
             callbacks.post(event);
         }
 
+    }
+
+    @Override
+    public void setGameState2(GameState gameState) {
+        gameState2 = gameState;
+        GameStateChanged event = new GameStateChanged();
+        event.setGameState(gameState);
+        if(callbacks != null) {
+            callbacks.post(event);
+        }
     }
 
     @Override
@@ -16319,7 +16337,7 @@ public class Client extends GameEngine implements RSClient {
 
     @Override
     public boolean isResized() {
-        return resized;
+        return resized || (!Client.loggedIn && getGameState() == GameState.LOGIN_SCREEN);
     }
 
     @Override

@@ -384,10 +384,10 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 
 				textureArrayId = -1;
 
-				//if (client.getGameState() == GameState.LOGGED_IN)
-				//{
+				if (client.getGameState() == GameState.LOGGED_IN || client.getGameState2() == GameState.LOGIN_SCREEN_ANIMATED)
+				{
 					uploadScene();
-				//}
+				}
 
 				checkGLErrors();
 			}
@@ -783,8 +783,8 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 	@Override
 	public void drawScene(int cameraX, int cameraY, int cameraZ, int cameraPitch, int cameraYaw, int plane)
 	{
-		yaw = client.getCameraYaw();
-		pitch = client.getCameraPitch();
+		yaw = cameraYaw;
+		pitch = cameraPitch;
 		viewportOffsetX = client.getViewportXOffset();
 		viewportOffsetY = client.getViewportYOffset();
 
@@ -821,20 +821,6 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 		uniformBuf.clear();
 
 		checkGLErrors();
-
-		System.out.println("==============================================");
-		System.out.println("YAW: " + yaw);
-		System.out.println("pitch: " + pitch);
-		System.out.println("viewportOffsetX: " + viewportOffsetX);
-		System.out.println("viewportOffsetY: " + viewportOffsetY);
-		System.out.println("getDrawDistance: " + getDrawDistance());
-		System.out.println("cameraX: " + cameraX);
-		System.out.println("cameraY: " + cameraY);
-		System.out.println("cameraZ: " + cameraZ);
-		System.out.println("getScale: " + client.getScale());
-		System.out.println("getCenterX: " + client.getCenterX());
-		System.out.println("getCenterY: " + client.getCenterY());
-		System.out.println("==============================================");
 
 	}
 
@@ -959,6 +945,8 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 		GL43C.glDispatchCompute(largeModels, 1, 1);
 
 		checkGLErrors();
+
+
 	}
 
 	@Override
@@ -966,6 +954,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 		SceneTilePaint paint, int tileZ, int tileX, int tileY,
 		int zoom, int centerX, int centerY)
 	{
+
 		if (computeMode == ComputeMode.NONE)
 		{
 			targetBufferOffset += sceneUploader.upload(paint,
@@ -1003,6 +992,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 		SceneTileModel model, int tileZ, int tileX, int tileY,
 		int zoom, int centerX, int centerY)
 	{
+
 		if (computeMode == ComputeMode.NONE)
 		{
 			targetBufferOffset += sceneUploader.upload(model,
@@ -1062,11 +1052,13 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 		GL43C.glTexSubImage2D(GL43C.GL_TEXTURE_2D, 0, 0, 0, width, height, GL43C.GL_BGRA, GL43C.GL_UNSIGNED_INT_8_8_8_8_REV, 0);
 		GL43C.glBindBuffer(GL43C.GL_PIXEL_UNPACK_BUFFER, 0);
 		GL43C.glBindTexture(GL43C.GL_TEXTURE_2D, 0);
+
 	}
 
 	@Override
 	public void draw(int overlayColor)
 	{
+
 		final int canvasHeight = client.getCanvasHeight();
 		final int canvasWidth = client.getCanvasWidth();
 
@@ -1127,7 +1119,8 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 
 		// Draw 3d scene
 		final GameState gameState = client.getGameState();
-		if (gameState.getState() >= GameState.LOADING.getState())
+		final GameState gameState1 = client.getGameState2();
+		if (true)
 		{
 			final TextureProvider textureProvider = client.getTextureProvider();
 			if (textureArrayId == -1)
@@ -1196,11 +1189,11 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 			GL43C.glUniform1f(uniSmoothBanding, config.smoothBanding() ? 0f : 1f);
 			GL43C.glUniform1i(uniColorBlindMode, config.colorBlindMode().ordinal());
 			GL43C.glUniform1f(uniTextureLightMode, config.brightTextures() ? 1f : 0f);
-			//if (gameState == GameState.LOGGED_IN)
-			//{
+			if (client.getGameState() == GameState.LOGGED_IN || client.getGameState2() == GameState.LOGIN_SCREEN_ANIMATED)
+			{
 				// avoid textures animating during loading
 				GL43C.glUniform1i(uniTick, client.getGameCycle());
-			//}
+			}
 
 			// Calculate projection matrix
 			float[] projectionMatrix = Mat4.scale(client.getScale(), client.getScale(), 1);
@@ -1364,6 +1357,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 	 */
 	private Image screenshot()
 	{
+		System.out.println("screenshot");
 		int width = client.getCanvasWidth();
 		int height = client.getCanvasHeight();
 
@@ -1417,8 +1411,17 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 	@Subscribe
 	public void onGameStateChanged(GameStateChanged gameStateChanged)
 	{
-		this.uploadScene();
-		checkGLErrors();
+		switch (gameStateChanged.getGameState())
+		{
+			case LOGGED_IN:
+			case LOGIN_SCREEN_ANIMATED:
+				if (computeMode != ComputeMode.NONE)
+				{
+					this.uploadScene();
+					checkGLErrors();
+				}
+				break;
+		}
 	}
 
 	private void uploadScene()
@@ -1506,6 +1509,9 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 	@Override
 	public void draw(Renderable renderable, int orientation, int pitchSin, int pitchCos, int yawSin, int yawCos, int x, int y, int z, long hash)
 	{
+
+
+
 		if (computeMode == ComputeMode.NONE)
 		{
 			Model model = renderable instanceof Model ? (Model) renderable : renderable.getModel();
@@ -1606,6 +1612,7 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 				targetBufferOffset += len;
 			}
 		}
+
 	}
 
 	@Override

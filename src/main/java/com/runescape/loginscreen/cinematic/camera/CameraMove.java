@@ -17,11 +17,11 @@ public class CameraMove {
 
     @Getter
     private Camera camera, baseCamera, defaultCamera;
-    private CameraFrame currentFrame;
-    private List<CameraFrame> frames = Lists.newArrayList();
+    private CameraFrameOLD currentFrame;
+    private List<CameraFrameOLD> frames = Lists.newArrayList();
 
     private void getNextFrame(int frameNum) {
-        Optional<CameraFrame> frameOpt =
+        Optional<CameraFrameOLD> frameOpt =
                 frames
                         .stream()
                         .filter(frame -> frame.hasFrame(frameNum))
@@ -89,14 +89,14 @@ public class CameraMove {
                 .tilt(startingTilt)
                 .rotation(startingRotation)
                 .build();
-        camera = baseCamera.copy();
-        defaultCamera = baseCamera.copy();
+        camera = baseCamera;
+        defaultCamera = baseCamera;
 
 
         return this;
     }
 
-    public CameraMove add(CameraFrame frame) {
+    public CameraMove add(CameraFrameOLD frame) {
         frame.setStart(maximumFrame);
         maximumFrame += frame.getFrames();
         frames.add(frame);
@@ -105,15 +105,15 @@ public class CameraMove {
 
     public CameraMove close() {
 
-        CameraFrame endFrame =
-                CameraFrame
+        CameraFrameOLD endFrame =
+                CameraFrameOLD
                         .builder()
                         .targetLocation(defaultCamera.getPosition())
                         .frames(1000)
                         .rotation(defaultCamera.getRotation())
                         .tilt(defaultCamera.getTilt())
                         .build();
-        CameraFrame last = frames.get(frames.size() - 1);
+        CameraFrameOLD last = frames.get(frames.size() - 1);
         last.setMoveScene(true);
         add(endFrame);
 
@@ -121,8 +121,8 @@ public class CameraMove {
     }
 
     public void reset() {
-        this.baseCamera = defaultCamera.copy();
-        this.camera = baseCamera.copy();
+        this.baseCamera = defaultCamera;
+        this.camera = baseCamera;
         this.currentFrame = null;
         this.currentFrameNumber = 1;
     }

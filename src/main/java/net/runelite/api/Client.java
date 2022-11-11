@@ -152,6 +152,14 @@ public interface Client extends GameEngine
 	 */
 	GameState getGameState();
 
+
+	/**
+	 * Gets the current game state.
+	 *
+	 * @return the game state2
+	 */
+	GameState getGameState2();
+
 	/**
 	 * Gets the current game state as an int
 	 *
@@ -165,6 +173,13 @@ public interface Client extends GameEngine
 	 * @param gameState
 	 */
 	void setGameState(GameState gameState);
+
+	/**
+	 * Sets the current game state
+	 *
+	 * @param gameState
+	 */
+	void setGameState2(GameState gameState);
 
 	/**
 	 * Sets the current game state

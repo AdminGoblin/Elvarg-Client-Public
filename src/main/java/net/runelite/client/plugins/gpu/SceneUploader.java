@@ -82,11 +82,14 @@ class SceneUploader
 
 		stopwatch.stop();
 		log.debug("Scene upload time: {}", stopwatch);
+
 	}
 
 	private void upload(Tile tile, GpuIntBuffer vertexBuffer, GpuFloatBuffer uvBuffer)
 	{
+
 		Tile bridge = tile.getBridge();
+
 		if (bridge != null)
 		{
 			upload(bridge, vertexBuffer, uvBuffer);
@@ -198,11 +201,13 @@ class SceneUploader
 				uploadSceneModel((Model) gameObject.getRenderable(), vertexBuffer, uvBuffer);
 			}
 		}
+
 	}
 
 	int upload(SceneTilePaint tile, int tileZ, int tileX, int tileY, GpuIntBuffer vertexBuffer, GpuFloatBuffer uvBuffer,
 		int offsetX, int offsetY, boolean padUvs)
 	{
+
 		final int[][][] tileHeights = client.getTileHeights();
 
 		final int localX = offsetX;
@@ -276,6 +281,7 @@ class SceneUploader
 	int upload(SceneTileModel sceneTileModel, int tileX, int tileY, GpuIntBuffer vertexBuffer, GpuFloatBuffer uvBuffer,
 		int offsetX, int offsetY, boolean padUvs)
 	{
+
 		final int[] faceX = sceneTileModel.getFaceX();
 		final int[] faceY = sceneTileModel.getFaceY();
 		final int[] faceZ = sceneTileModel.getFaceZ();
@@ -380,6 +386,7 @@ class SceneUploader
 
 	public int pushModel(Model model, GpuIntBuffer vertexBuffer, GpuFloatBuffer uvBuffer)
 	{
+
 		final int triangleCount = Math.min(model.getFaceCount(), GpuPlugin.MAX_TRIANGLE);
 
 		vertexBuffer.ensureCapacity(triangleCount * 12);

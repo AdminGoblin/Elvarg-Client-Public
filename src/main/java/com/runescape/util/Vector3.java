@@ -92,6 +92,10 @@ public class Vector3 {
         return new Vector3(x, y, z);
     }
 
+    public static Vector3 of(int x, int y, int z) {
+        return new Vector3(x, y, z);
+    }
+
 
     public Vector3 add(Vector3 toAdd) {
         return Vector3.of(this.x + toAdd.x, this.y + toAdd.y, this.z + toAdd.z);

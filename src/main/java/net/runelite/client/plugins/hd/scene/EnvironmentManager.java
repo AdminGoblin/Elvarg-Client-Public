@@ -533,8 +533,7 @@ public class EnvironmentManager
 	 */
 	public float[] getFogColor()
 	{
-		return Arrays.copyOf(client.getGameState().getState() >= GameState.LOADING.getState() ?
-			currentFogColor : BLACK_COLOR, 3);
+		return Arrays.copyOf(currentFogColor, 3);
 	}
 
 	/**

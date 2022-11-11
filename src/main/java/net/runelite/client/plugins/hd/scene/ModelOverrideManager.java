@@ -50,7 +50,7 @@ public class ModelOverrideManager {
                     for (int objectId : entry.objectIds)
                         addEntry(ModelHash.packUuid(objectId, ModelHash.TYPE_OBJECT), entry);
                 }
-                if (client.getGameState() == GameState.LOGGED_IN)
+                if (client.getGameState() == GameState.LOGGED_IN || client.getGameState2() == GameState.LOGIN_SCREEN_ANIMATED)
                     plugin.reloadSceneNextGameTick();
                 log.debug("Loaded {} model overrides", modelOverrides.size());
             } catch (IOException ex) {
