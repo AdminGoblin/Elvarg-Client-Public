@@ -783,8 +783,8 @@ public class GpuPlugin extends Plugin implements DrawCallbacks
 	@Override
 	public void drawScene(int cameraX, int cameraY, int cameraZ, int cameraPitch, int cameraYaw, int plane)
 	{
-		yaw = cameraYaw;
-		pitch = cameraPitch;
+		yaw = client.getCameraYaw();
+		pitch = client.getCameraPitch();
 		viewportOffsetX = client.getViewportXOffset();
 		viewportOffsetY = client.getViewportYOffset();
 

@@ -54,6 +54,15 @@ class LoginScreen(val client : Client) {
 
         val loginBoxX = centerX - (360 / 2)
         val loginBoxY = centerY - (200 / 2) + 21
+
+        ImageCache.get(if(Client.preferences.enableMusic) 25 else 26).drawAdvancedSprite(GameEngine.canvasWidth - 38 - 5,GameEngine.canvasHeight - 45 + 7)
+        if(WorldManager.loadedWorlds) {
+            ImageCache.get(3).drawAdvancedSprite(centerX - (GameEngine.canvasWidth / 2) + 5,GameEngine.canvasHeight - 45 + 8)
+            client.newBoldFont.drawCenteredString("World: ${WorldManager.selectedWorld?.name}", centerX - (GameEngine.canvasWidth / 2) + 5 + (100 / 2),GameEngine.canvasHeight - 45 + 23,0xFFFFFF,1)
+            client.newSmallFont.drawCenteredString(WorldManager.worldStatusText, centerX - (GameEngine.canvasWidth / 2) + 5 + (100 / 2),GameEngine.canvasHeight - 45 + 38,0xFFFFFF,1)
+
+        }
+
         when(loginState) {
             LoginState.EULA -> {
                 eulaText.forEachIndexed { index, line ->
@@ -120,14 +129,6 @@ class LoginScreen(val client : Client) {
                     0xFFFF00, 1
                 )
 
-                ImageCache.get(if(Client.preferences.enableMusic) 25 else 26).drawAdvancedSprite(GameEngine.canvasWidth - 38 - 5,GameEngine.canvasHeight - 45 + 7)
-                if(WorldManager.loadedWorlds) {
-                    ImageCache.get(3).drawAdvancedSprite(centerX - (GameEngine.canvasWidth / 2) + 5,GameEngine.canvasHeight - 45 + 8)
-                    client.newBoldFont.drawCenteredString("World: ${WorldManager.selectedWorld?.name}", centerX - (GameEngine.canvasWidth / 2) + 5 + (100 / 2),GameEngine.canvasHeight - 45 + 23,0xFFFFFF,1)
-                    client.newSmallFont.drawCenteredString(WorldManager.worldStatusText, centerX - (GameEngine.canvasWidth / 2) + 5 + (100 / 2),GameEngine.canvasHeight - 45 + 38,0xFFFFFF,1)
-
-                }
-
             }
             LoginState.WORLD_SELECT -> WorldManager.renderWorldSelect()
             else -> {}
@@ -140,6 +141,14 @@ class LoginScreen(val client : Client) {
         val centerY = GameEngine.canvasHeight / 2
         val loginBoxX = centerX - (360 / 2)
         val loginBoxY = centerY - (200 / 2) + 21
+
+        if(client.newclickInRegion(centerX - (GameEngine.canvasWidth / 2) + 5,GameEngine.canvasHeight - 45 + 8,ImageCache.get(3))) {
+            openWorldSectionScreen(true)
+        }
+
+        if(client.newclickInRegion(GameEngine.canvasWidth - 38 - 5,GameEngine.canvasHeight - 45 + 7,ImageCache.get(25))) {
+            Client.preferences.enableMusic = !Client.preferences.enableMusic
+        }
 
         when(loginState) {
             LoginState.EULA -> {
@@ -179,10 +188,6 @@ class LoginScreen(val client : Client) {
                     }
                 }
 
-                if(client.newclickInRegion(centerX - (GameEngine.canvasWidth / 2) + 5,GameEngine.canvasHeight - 45 + 8,ImageCache.get(3))) {
-                    openWorldSectionScreen(true)
-                }
-
                 if(client.newclickInRegion(loginBoxX + 110, loginBoxY + 70,200,15)) {
                     client.loginScreenCursorPos = 0
                 }
@@ -191,9 +196,6 @@ class LoginScreen(val client : Client) {
                     client.loginScreenCursorPos = 1
                 }
 
-                if(client.newclickInRegion(GameEngine.canvasWidth - 38 - 5,GameEngine.canvasHeight - 45 + 7,ImageCache.get(25))) {
-                    Client.preferences.enableMusic = !Client.preferences.enableMusic
-                }
 
                 if(client.newclickInRegion(loginBoxX + 63,loginBoxY + 107,ImageCache.get(21))) {
                     Client.preferences.rememberUsername = !Client.preferences.rememberUsername

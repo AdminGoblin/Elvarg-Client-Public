@@ -1817,7 +1817,7 @@ public class HdPlugin extends Plugin implements DrawCallbacks
 			lastAntiAliasingMode = antiAliasingMode;
 
 			// Clear scene
-			float[] fogColor = hasLoggedIn ? environmentManager.getFogColor() : EnvironmentManager.BLACK_COLOR;
+			float[] fogColor = (hasLoggedIn || client.getGameState2() == GameState.LOGIN_SCREEN_ANIMATED) ? environmentManager.getFogColor() : EnvironmentManager.BLACK_COLOR;
 			for (int i = 0; i < fogColor.length; i++)
 			{
 				fogColor[i] = HDUtils.linearToSrgb(fogColor[i]);

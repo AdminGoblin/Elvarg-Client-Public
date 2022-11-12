@@ -486,8 +486,8 @@ public class Client extends GameEngine implements RSClient {
     private int[] anIntArray829;
     private volatile boolean aBoolean831;
     private int loginScreenState;
-    private Npc[] npcs;
-    private int npcCount;
+    public Npc[] npcs;
+    public int npcCount;
     private int[] npcIndices;
     private int removedMobCount;
     private int[] removedMobs;
@@ -4481,7 +4481,7 @@ public class Client extends GameEngine implements RSClient {
     }
 
 
-    private void showPrioritizedNPCs() {
+    public void showPrioritizedNPCs() {
 
         for (int index = 0; index < npcCount; index++) {
             Npc npc = npcs[npcIndices[index]];
@@ -4495,19 +4495,11 @@ public class Client extends GameEngine implements RSClient {
 
     private boolean prioritizedNpc(Npc npc) {
 
-        //Check if it's being interacted with
-        if (localPlayer.interactingEntity != -1 &&
-                localPlayer.interactingEntity < 32768) {
-            if (npc.index == localPlayer.interactingEntity) {
-                return true;
-            }
-        }
-
-        return npc.desc != null && npc.desc.priorityRender;
+        return npc.desc != null;
 
     }
 
-    private void showOtherNpcs() {
+    public void showOtherNpcs() {
         for (int index = 0; index < npcCount; index++) {
             Npc npc = npcs[npcIndices[index]];
             showNpc(npc, index, false);
@@ -15755,7 +15747,7 @@ public class Client extends GameEngine implements RSClient {
 
     @Override
     public int getCameraPitch() {
-        return yCameraCurve;
+        return cinematicScene != null ? (int) cinematicScene.getCamera().getTilt() : yCameraCurve;
     }
 
     @Override
@@ -15765,7 +15757,7 @@ public class Client extends GameEngine implements RSClient {
 
     @Override
     public int getCameraYaw() {
-        return xCameraCurve;
+        return cinematicScene != null ? (int) cinematicScene.getCamera().getRotation() : xCameraCurve;
     }
 
     public void setCameraYaw(int cameraPitch) {
@@ -17762,12 +17754,12 @@ public class Client extends GameEngine implements RSClient {
 
     @Override
     public int getOculusOrbFocalPointX() {
-        return xCameraPos;
+        return  cinematicScene != null ? cinematicScene.getCamera().getPosition().getX() : xCameraPos;
     }
 
     @Override
     public int getOculusOrbFocalPointY() {
-        return yCameraPos;
+        return cinematicScene != null ? cinematicScene.getCamera().getPosition().getY() : xCameraPos;
     }
 
     @Override

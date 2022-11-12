@@ -1103,8 +1103,6 @@ public final class SceneGraph implements RSScene {
         final DrawCallbacks drawCallbacks = Client.instance.getDrawCallbacks();
         if (drawCallbacks != null)
         {
-            Client.instance.setCameraPitch(camAngleZ);
-            Client.instance.setCameraYaw(camAngleXY);
             Client.instance.getDrawCallbacks().drawScene(cameraXPos, cameraZPos, cameraYPos, camAngleZ, camAngleXY, planeZ);
         }
 

@@ -4,9 +4,11 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Queues;
 import com.runescape.Client;
 import com.runescape.cache.Resource;
+import com.runescape.cache.def.NpcDefinition;
 import com.runescape.cache.graphics.sprite.Sprite;
 import com.runescape.draw.Rasterizer2D;
 import com.runescape.draw.Rasterizer3D;
+import com.runescape.entity.Npc;
 import com.runescape.loginscreen.cinematic.camera.Camera;
 import com.runescape.loginscreen.cinematic.camera.CameraFrameOLD;
 import com.runescape.loginscreen.cinematic.camera.CameraMove;
@@ -72,7 +74,7 @@ public class CinematicScene {
     private void setupWorldMap() {
 
         Vector3[] vecs = {
-                Vector3.of(3223, 3218, 0)
+                Vector3.of(2783,4849, 0)
         };
         mapPositions.addAll(Arrays.asList(vecs));
     }
@@ -131,66 +133,11 @@ public class CinematicScene {
                             .tilt(0)
                             .frames(170)
                             .build()
-                    )
-//			.add(CameraFrame
-//					.builder()
-//					.targetLocation(Vector3.of(2816, 1800, -840))
-//					.rotation(0)
-//					.tilt(51)
-//					.frames(100)
-//					.build()
-//			)
-//			.add(CameraFrame
-//					.builder()
-//					.targetLocation(Vector3.of(2816, 1600, -1200))
-//					.rotation(0)
-//					.tilt(101)
-//					.frames(652)
-//					.build()
-//			)
-//			.add(CameraFrame
-//					.builder()
-//					.targetLocation(Vector3.of(2816, 1200, -1200))
-//					.rotation(2047)
-//					.tilt(101)
-//					.frames(1956)
-//					.build()
-//			)
-//			.add(CameraFrame
-//					.builder()
-//					.targetLocation(Vector3.of(2816, 3192, -1700))
-//					.rotation(2047)
-//					.tilt(81)
-//					.frames(327)
-//					.moveScene(true)
-//					.build()
-//			)
-//
-//			.add(CameraFrame
-//					.builder()
-//					.targetLocation(Vector3.of(2816, 287, -3181))
-//					.rotation(1024)
-//					.tilt(81)
-//					.frames(652)
-//					.build()
-//			)
-//
-//			.add(CameraFrame
-//					.builder()
-//					.targetLocation(Vector3.of(2816, 3192, -2100))
-//					.rotation(1024)
-//					.tilt(81)
-//					.frames(652)
-//					.moveScene(true)
-//					.build()
-//			)
-
-            ;
+                    );
 
             this.mapCameraMoves.add(otherCameraMove);
         }
 
-        //this.mapCameraMoves.add(homeCameraMove);
     }
 
     public void prepareLoginScene() {
@@ -223,7 +170,7 @@ public class CinematicScene {
                     }
                 } else if(allMapsProvided()) {
                      this.loadBackgroundMap();
-                        loaded = true;
+                     loaded = true;
 
                     System.out.println("PREP2");
                     client.setGameState2(GameState.LOGIN_SCREEN_ANIMATED);
@@ -271,6 +218,8 @@ public class CinematicScene {
             try {
                 cameraMove.apply(this);
                 Camera camera = getCamera();
+                client.showPrioritizedNPCs();
+                client.showOtherNpcs();
                 client.getScene().render(camera.getPosition().getX(), camera.getPosition().getY(), camera.getRotation(), camera.getPosition().getZ(), worldZ, camera.getTilt());
             } catch(Exception ex) {
                 ex.printStackTrace();
@@ -285,6 +234,14 @@ public class CinematicScene {
         } else {
             blackWindow.drawTransparentSprite(0, 0, (int) Math.ceil(fadeFromBlack.get()));
             prepareLoginScene();
+            Npc npc = new Npc();
+            npc.x = 3224;
+            npc.y = 3219;
+            npc.height = 0;
+            npc.desc = NpcDefinition.lookup(239);
+            Client.instance.npcs[0] = npc;
+            client.npcCount++;
+
         }
 
     }
