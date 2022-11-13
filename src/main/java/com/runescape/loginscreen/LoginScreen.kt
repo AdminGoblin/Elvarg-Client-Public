@@ -279,7 +279,7 @@ class LoginScreen(val client : Client) {
                     }
                 }
             }
-            LoginBackground.ANIMATED_GAME_WORLD -> { Client.instance.cinematicScene.prepareLoginScene() }
+            LoginBackground.ANIMATED_GAME_WORLD -> { Client.instance.cinematicScene.render() }
             else -> {}
         }
     }

@@ -74,7 +74,8 @@ public class CinematicScene {
     private void setupWorldMap() {
 
         Vector3[] vecs = {
-                Vector3.of(3223,3217, 0)
+                Vector3.of(3223,3217, 0),
+                Vector3.of(3081,3251, 0)
         };
         mapPositions.addAll(Arrays.asList(vecs));
     }
@@ -133,7 +134,8 @@ public class CinematicScene {
                      this.loadBackgroundMap();
                      loaded = true;
 
-                    System.out.println("PREP2");
+                    System.out.println("LOADING NEW");
+                    setNextScene();
                     client.setGameState2(GameState.LOGIN_SCREEN_ANIMATED);
                 }
 
@@ -147,6 +149,9 @@ public class CinematicScene {
 
     public void loadBackgroundMap() {
         boolean modelsPreloaded = regions.stream().allMatch(region -> MapRegion.method189(0, region.getObjectsData(), 0));
+        if(!modelsPreloaded) {
+            return;
+        }
 
         Client.setBounds();
 
@@ -172,9 +177,13 @@ public class CinematicScene {
 
         if(loaded) {
             Rasterizer3D.useViewport();
-            Rasterizer2D.clear();
-            Rasterizer3D.fieldOfView = 600;
 
+            Rasterizer2D.clear();
+            if (Rasterizer3D.fieldOfView != Client.cameraZoom) {
+                Rasterizer3D.fieldOfView = Client.cameraZoom;
+            }
+
+            client.getScene().minLevel = 0;
 
             try {
                 cameraMove.apply(this);
@@ -187,21 +196,21 @@ public class CinematicScene {
             }
             if(fadeFromBlack.get() > 0.0) {
                 fadeFromBlack.set( fadeFromBlack.get() - (0.5));
-                blackWindow.drawTransparentSprite(0, 0, (int) Math.ceil(fadeFromBlack.get()));
+                blackWindow.drawAdvancedSprite(0, 0, (int) Math.ceil(fadeFromBlack.get()));
             } else if(fadeToBlack.get() > 0) {
                 fadeToBlack.set(fadeToBlack.get() - 0.5);
-                blackWindow.drawTransparentSprite(0, 0, 100 - (int) Math.ceil(fadeToBlack.get()));
+                blackWindow.drawAdvancedSprite(0, 0, 100 - (int) Math.ceil(fadeToBlack.get()));
             }
         } else {
-            blackWindow.drawTransparentSprite(0, 0, (int) Math.ceil(fadeFromBlack.get()));
+            blackWindow.drawAdvancedSprite(0, 0, (int) Math.ceil(fadeFromBlack.get()));
             prepareLoginScene();
-            Npc npc = new Npc();
-            npc.x = 3224;
-            npc.y = 3219;
-            npc.height = 0;
-            npc.desc = NpcDefinition.lookup(239);
-            Client.instance.npcs[0] = npc;
-            client.npcCount++;
+            //Npc npc = new Npc();
+            //npc.x = 3224;
+            //npc.y = 3219;
+            //npc.height = 0;
+           // npc.desc = NpcDefinition.lookup(239);
+            ///Client.instance.npcs[0] = npc;
+            //client.npcCount++;
 
         }
 
@@ -253,17 +262,13 @@ public class CinematicScene {
         fadeToBlack.set(100);
     }
 
-    public void moveScene(int x, int y) {
-        this.worldX = x;
-        this.worldY = y;
-        resetSceneGraph();
-    }
 
     public void resetMapData() {
         regions.clear();
     }
 
     public void resetSceneGraph() {
+        loaded = false;
         this.fadeFromBlack.set(100);
     }
 

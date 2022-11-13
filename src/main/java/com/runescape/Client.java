@@ -138,6 +138,9 @@ public class Client extends GameEngine implements RSClient {
 
     protected final void resizeGame() {
         Client.setBounds();
+        if(cinematicScene != null) {
+            cinematicScene.resizeFade();
+        }
     }
 
     public static final int TOTAL_ARCHIVES = 9;
@@ -8966,6 +8969,7 @@ public class Client extends GameEngine implements RSClient {
                 MouseHandler.lastMoved = 0L;
                 MouseHandler.lastPressed = 0L;
                 aBoolean954 = true;
+                cinematicScene.resetSceneGraph();
                 loggedIn = true;
                 packetSender = new PacketSender(cipher);
                 incoming.currentPosition = 0;
