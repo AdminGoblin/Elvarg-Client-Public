@@ -4,9 +4,7 @@ import com.runescape.Client;
 import com.runescape.cache.graphics.ImageCache;
 import com.runescape.cache.graphics.sprite.Sprite;
 import com.runescape.draw.Rasterizer2D;
-import net.runelite.api.IndexedSprite;
 
-import java.awt.*;
 import java.util.Arrays;
 import java.util.Random;
 

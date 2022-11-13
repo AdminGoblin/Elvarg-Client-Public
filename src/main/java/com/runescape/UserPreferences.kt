@@ -1,7 +1,6 @@
 package com.runescape
 
 import com.beust.klaxon.Klaxon
-import com.runescape.draw.Rasterizer3D
 import com.runescape.loginscreen.LoginBackground
 import com.runescape.sign.SignLink
 import net.runelite.rs.api.RSClientPreferences

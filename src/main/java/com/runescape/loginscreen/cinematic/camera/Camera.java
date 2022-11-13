@@ -1,23 +1,23 @@
 package com.runescape.loginscreen.cinematic.camera;
 import com.runescape.util.Vector3;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Builder
 @Getter
 @Setter
 public class Camera {
+
+    public Camera(Vector3 position, double rotation, double tilt) {
+        this.position = position;
+        this.rotation = rotation;
+        this.tilt = tilt;
+    }
 
     private Vector3 position;
     public double rotation, tilt;
 
     public Camera copy() {
-        return Camera.builder()
-           .position(this.position)
-           .tilt(this.tilt)
-           .rotation(this.rotation)
-        .build();
+        return new Camera(this.position,this.rotation,this.tilt);
     }
 
     public int getRotation() {

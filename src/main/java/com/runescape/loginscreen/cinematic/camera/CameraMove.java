@@ -83,12 +83,7 @@ public class CameraMove {
 
     public CameraMove startInformation(Vector3 startingPosition, int startingRotation, int startingTilt) {
 
-        baseCamera = Camera
-                .builder()
-                .position(startingPosition)
-                .tilt(startingTilt)
-                .rotation(startingRotation)
-                .build();
+        baseCamera = new Camera(startingPosition,startingRotation,startingTilt);
         camera = baseCamera;
         defaultCamera = baseCamera;
 
@@ -105,14 +100,7 @@ public class CameraMove {
 
     public CameraMove close() {
 
-        CameraFrameOLD endFrame =
-                CameraFrameOLD
-                        .builder()
-                        .targetLocation(defaultCamera.getPosition())
-                        .frames(1000)
-                        .rotation(defaultCamera.getRotation())
-                        .tilt(defaultCamera.getTilt())
-                        .build();
+        CameraFrameOLD endFrame = new CameraFrameOLD(defaultCamera.getPosition(),defaultCamera.getRotation(),defaultCamera.getTilt(),1000);
         CameraFrameOLD last = frames.get(frames.size() - 1);
         last.setMoveScene(true);
         add(endFrame);

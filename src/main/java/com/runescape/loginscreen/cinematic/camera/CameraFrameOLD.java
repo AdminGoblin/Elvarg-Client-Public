@@ -1,26 +1,34 @@
 package com.runescape.loginscreen.cinematic.camera;
 
 import com.runescape.util.Vector3;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Builder
 public class CameraFrameOLD {
+
+    public CameraFrameOLD(Vector3 targetLocation, int rotation, int tilt, int frames,boolean moveScene) {
+        this.moveScene = moveScene;
+        this.targetLocation = targetLocation;
+        this.rotation = rotation;
+        this.tilt = tilt;
+        this.frames = frames;
+    }
+
+    public CameraFrameOLD(Vector3 targetLocation, int rotation, int tilt, int frames) {
+        this.targetLocation = targetLocation;
+        this.rotation = rotation;
+        this.tilt = tilt;
+        this.frames = frames;
+    }
 
     @Setter
     private boolean moveScene;
 
     private Vector3 targetLocation;
     private Vector3 jumpLocation;
-
-    @Builder.Default
     public int rotation = -1;
-    @Builder.Default
     public int tilt = -1;
-
-    @Builder.Default
     private int frames = 500;
 
     @Setter

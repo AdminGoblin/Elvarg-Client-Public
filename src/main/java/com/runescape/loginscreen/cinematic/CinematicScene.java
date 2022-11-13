@@ -74,7 +74,7 @@ public class CinematicScene {
     private void setupWorldMap() {
 
         Vector3[] vecs = {
-                Vector3.of(2783,4849, 0)
+                Vector3.of(3223,3217, 0)
         };
         mapPositions.addAll(Arrays.asList(vecs));
     }
@@ -83,57 +83,18 @@ public class CinematicScene {
 
         for(int i = 0;i<1;i++) {
             CameraMove otherCameraMove = new CameraMove();
+
             otherCameraMove
-                    .startInformation(Vector3.of(1000, 2550, -3181), 1500, 1)
-                    .add(CameraFrameOLD
-                            .builder()
-                            .targetLocation(Vector3.of(1400, 2550, -2000))
-                            .rotation(1500)
-                            .tilt(101)
-                            .frames(250)
-                            .build()
-                    )
-                    .add(CameraFrameOLD
-                            .builder()
-                            .targetLocation(Vector3.of(1800, 2550, -1600))
-                            .rotation(1500)
-                            .tilt(101)
-                            .frames(240)
-                            .build()
-                    )
-                    .add(CameraFrameOLD
-                            .builder()
-                            .targetLocation(Vector3.of(2816, 2550, -1200))
-                            .rotation(1500)
-                            .tilt(101)
-                            .frames(245)
-                            .build()
-                    )
-                    .add(CameraFrameOLD
-                            .builder()
-                            .targetLocation(Vector3.of(3216, 2550, -1100))
-                            .rotation(1500)
-                            .tilt(50)
-                            .frames(200)
-                            .moveScene(true)
-                            .build()
-                    )
-                    .add(CameraFrameOLD
-                            .builder()
-                            .targetLocation(Vector3.of(3616, 2550, -1000))
-                            .rotation(1500)
-                            .tilt(20)
-                            .frames(175)
-                            .build()
-                    )
-                    .add(CameraFrameOLD
-                            .builder()
-                            .targetLocation(Vector3.of(3980, 2550, -1000))
-                            .rotation(1500)
-                            .tilt(0)
-                            .frames(170)
-                            .build()
-                    );
+
+                    .startInformation(Vector3.of(6711, 5920, -1901), 2032, 383)
+                    .add(new CameraFrameOLD(Vector3.of(6597, 7213, -665), 2034, 128, 250))
+                    .add(new CameraFrameOLD(Vector3.of(6454, 8791, -715), 1983, 133, 240))
+                    .add(new CameraFrameOLD(Vector3.of(6452, 9108, -1017), 1951, 208, 245))
+                    .add(new CameraFrameOLD(Vector3.of(6131, 10220, -1420), 1794, 288, 200))
+                    .add(new CameraFrameOLD(Vector3.of(6135, 11541, -1420), 1277, 288, 175))
+                    .add(new CameraFrameOLD(Vector3.of(7432, 11543, -1420), 772, 288, 175))
+                    .add(new CameraFrameOLD(Vector3.of(7440, 10224, -1420), 256, 288, 175));
+
 
             this.mapCameraMoves.add(otherCameraMove);
         }
@@ -151,8 +112,8 @@ public class CinematicScene {
                 if(this.regions.isEmpty()) {
 
                     startResourceProvider();
-                    for(int x = 0;x<1;x++) {
-                        for(int y = 0;y<1;y++) {
+                    for(int x = 0;x<3;x++) {
+                        for(int y = 0;y<3;y++) {
                             int newX = (worldX + (64 * x)) / 64;
                             int newY = (worldY + (64 * y)) / 64;
                             MapRegionData region = MapRegionData.builder()
@@ -197,7 +158,7 @@ public class CinematicScene {
         this.regions.forEach(region -> {
             int offsetX = (region.getRegionX() - baseX) * 64;
             int offsetY = (region.getRegionY() - baseY) * 64;
-            client.currentMapRegion.method180(region.getLandscapeData(), offsetY, offsetX, region.getRegionX() * 64, region.getRegionY() * 64, client.collisionMaps);
+            client.currentMapRegion.method180(region. getLandscapeData(), offsetY, offsetX, region.getRegionX() * 64, region.getRegionY() * 64, client.collisionMaps);
             client.currentMapRegion.method190(offsetX, client.collisionMaps, offsetY, client.getScene(), region.getObjectsData());
         });
 

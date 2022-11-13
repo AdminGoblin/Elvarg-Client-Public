@@ -6,7 +6,6 @@ import com.runescape.UserPreferences
 import com.runescape.cache.graphics.ImageCache
 import com.runescape.engine.GameEngine
 import com.runescape.engine.impl.KeyHandler
-import com.runescape.engine.impl.MouseHandler
 import com.runescape.loginscreen.worlds.WorldManager
 import com.runescape.loginscreen.worlds.WorldManager.openWorldSectionScreen
 import com.runescape.loginscreen.worlds.WorldManager.worldList
@@ -280,7 +279,7 @@ class LoginScreen(val client : Client) {
                     }
                 }
             }
-            LoginBackground.ANIMATED_GAME_WORLD -> { Client.instance.cinematicScene.render(); }
+            LoginBackground.ANIMATED_GAME_WORLD -> { Client.instance.cinematicScene.prepareLoginScene() }
             else -> {}
         }
     }
