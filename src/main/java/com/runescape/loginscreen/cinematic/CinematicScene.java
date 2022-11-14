@@ -4,11 +4,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Queues;
 import com.runescape.Client;
 import com.runescape.cache.Resource;
-import com.runescape.cache.def.NpcDefinition;
 import com.runescape.cache.graphics.sprite.Sprite;
 import com.runescape.draw.Rasterizer2D;
 import com.runescape.draw.Rasterizer3D;
-import com.runescape.entity.Npc;
 import com.runescape.loginscreen.cinematic.camera.Camera;
 import com.runescape.loginscreen.cinematic.camera.CameraFrameOLD;
 import com.runescape.loginscreen.cinematic.camera.CameraMove;
@@ -49,7 +47,7 @@ public class CinematicScene {
         });
         this.setupCamera();
         this.setupWorldMap();
-        randomizeMaps();
+        //randomizeMaps();
 
         setNextScene();
         setNextCamera();
@@ -75,7 +73,7 @@ public class CinematicScene {
 
         Vector3[] vecs = {
                 Vector3.of(3223,3217, 0),
-                Vector3.of(3081,3251, 0)
+                //Vector3.of(3081,3251, 0)
         };
         mapPositions.addAll(Arrays.asList(vecs));
     }
@@ -92,7 +90,7 @@ public class CinematicScene {
                     .add(new CameraFrameOLD(Vector3.of(6454, 8791, -715), 1983, 133, 240))
                     .add(new CameraFrameOLD(Vector3.of(6452, 9108, -1017), 1951, 208, 245))
                     .add(new CameraFrameOLD(Vector3.of(6131, 10220, -1420), 1794, 288, 200))
-                    .add(new CameraFrameOLD(Vector3.of(6135, 11541, -1420), 1277, 288, 175))
+                    .add(new CameraFrameOLD(Vector3.of(6135, 11541, -1420), 1277, 288, 175,true))
                     .add(new CameraFrameOLD(Vector3.of(7432, 11543, -1420), 772, 288, 175))
                     .add(new CameraFrameOLD(Vector3.of(7440, 10224, -1420), 256, 288, 175));
 
@@ -104,11 +102,12 @@ public class CinematicScene {
 
     public void prepareLoginScene() {
         client.setGameState2(GameState.LOADING);
+        System.out.println("LOADING");
         if(client.resourceProvider == null) {
             System.out.println("ODM NULL");
             return;
         }
-        if(!loaded) {
+        if(!loadedScenegraph) {
             try {
                 if(this.regions.isEmpty()) {
 
@@ -129,13 +128,12 @@ public class CinematicScene {
                                 regions.add(region);
                             }
                         }
+
                     }
                 } else if(allMapsProvided()) {
-                     this.loadBackgroundMap();
-                     loaded = true;
-
-                    System.out.println("LOADING NEW");
+                    loadedScenegraph = loadBackgroundMap();
                     setNextScene();
+                    System.out.println("LOADED");
                     client.setGameState2(GameState.LOGIN_SCREEN_ANIMATED);
                 }
 
@@ -145,12 +143,12 @@ public class CinematicScene {
         }
     }
 
-    boolean loaded = false;
+    boolean loadedScenegraph = false;
 
-    public void loadBackgroundMap() {
+    public boolean loadBackgroundMap() {
         boolean modelsPreloaded = regions.stream().allMatch(region -> MapRegion.method189(0, region.getObjectsData(), 0));
         if(!modelsPreloaded) {
-            return;
+            return false;
         }
 
         Client.setBounds();
@@ -168,14 +166,19 @@ public class CinematicScene {
         });
 
         client.currentMapRegion.createRegionScene(client.collisionMaps, client.getScene());
-
+        return true;
     }
 
 
 
     public void render() {
 
-        if(loaded) {
+        if (client.getGameState2() == GameState.LOADING) {
+            client.drawLoadingMessage("Loading - please wait.");
+        }
+
+        if(loadedScenegraph) {
+
             Rasterizer3D.useViewport();
 
             Rasterizer2D.clear();
@@ -204,6 +207,7 @@ public class CinematicScene {
         } else {
             blackWindow.drawAdvancedSprite(0, 0, (int) Math.ceil(fadeFromBlack.get()));
             prepareLoginScene();
+
             //Npc npc = new Npc();
             //npc.x = 3224;
             //npc.y = 3219;
@@ -219,6 +223,7 @@ public class CinematicScene {
 
 
     private void setNextScene() {
+
         if(worldX != 0 && worldY != 0)
             mapPositions.offer(Vector3.of(worldX, worldY, 0));
 
@@ -268,7 +273,7 @@ public class CinematicScene {
     }
 
     public void resetSceneGraph() {
-        loaded = false;
+        loadedScenegraph = false;
         this.fadeFromBlack.set(100);
     }
 
@@ -287,6 +292,8 @@ public class CinematicScene {
         return regions.stream().allMatch(region -> region.getObjectsData() != null && region.getLandscapeData() != null);
     }
     private List<MapRegionData> regions = Lists.newArrayList();
+
+
 
 
     private int worldX = 0, worldY = 0, worldZ = 0;

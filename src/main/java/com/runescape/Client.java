@@ -1575,7 +1575,7 @@ public class Client extends GameEngine implements RSClient {
         return true;
     }
 
-    private void drawLoadingMessage(String messages) {
+    public void drawLoadingMessage(String messages) {
         int width = 0;
         for (String message : messages.split("<br>")) {
             int size = regularText.getTextWidth(message);
