@@ -123,6 +123,10 @@ tasks.withType<JavaCompile>().configureEach {
     options.isIncremental = true
 }
 
+task<Exec>("obfuscate") {
+    commandLine("java", "-jar", "allatori/allatori.jar", "allatori/config.xml")
+}
+
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
         jvmTarget = "11"

@@ -1,0 +1,85 @@
+<config>
+	<jars>
+		<jar in="../build/libs/Elvarg-Client-data-1.0-all.jar" out="../build/libs/Client.jar"/>
+	</jars>
+
+	<keep-names>
+		<class template="class com.runescape.Client"/>
+	</keep-names>
+
+	<ignore-classes>
+
+		<class template="class it.*"/>
+		<class template="class io.*"/>
+		<class template="class org.*"/>
+		<class template="class ch.*"/>
+		<class template="class jogamp.*"/>
+		<class template="class okio.*"/>
+		<class template="class okhttp3.*"/>
+		<class template="class javafx.*"/>
+
+
+		<class template="class kotlin.*"/>
+		<class template="class javax.*"/>
+		<class template="class natives.*"/>
+		<class template="class native.*"/>
+		<class template="class joptsimple.*"/>
+		<class template="class netscape.*"/>
+
+		<class template="class net.runelite.*"/>
+		<class template="class net.java.*"/>
+		<class template="class net.lingala.*"/>
+		<class template="class net.sf.*"/>
+		<class template="class net.java.*"/>
+
+		<class template="class com.apple.*"/>
+		<class template="class com.jakewharton.*"/>
+		<class template="class com.jogamp.*"/>
+		<class template="class com.sun.*"/>
+		<class template="class com.google.*"/>
+		<class template="class com.sun.*"/>
+		<class template="class com.jgoodies.*"/>
+		<class template="class com.miglayout.*"/>
+		<class template="class com.codehaus.*"/>
+		<class template="class com.github.*"/>
+
+		<class template="class natives.natives.*"/>
+	</ignore-classes>
+
+	<property name="log-file" value="renaming-log.xml"/>
+
+	<property name="string-encryption" value="disable"/>
+
+	<property name="control-flow-obfuscation" value="disable"/>
+
+	<property name="default-package" value=""/>
+	<property name="force-default-package" value="disable"/>
+
+	<!--<property name="remove-calls" value="com.package.Logger.debug"/>
+	<property name="remove-calls" value="java.lang.System.out.println"/>
+	<property name="remove-calls" value="java.lang.System.out.print"/>
+	<property name="remove-calls" value="java.lang.System.out.printf"/>
+	<property name="remove-calls" value="java.lang.System.err.println"/>
+	<property name="remove-calls" value="java.lang.System.err.print"/>
+	<property name="remove-calls" value="java.lang.System.err.printf"/>-->
+
+	<property name="classes-naming" value="iii"/>
+	<property name="fields-naming" value="keywords"/>
+	<property name="methods-naming" value="keywords"/>
+	<property name="local-variables-naming" value="single-name"/>
+
+	<property name="generics" value="remove"/>
+
+	<property name="update-resource-contents" value="disable"/>
+	<property name="update-resource-names" value="disable"/>
+
+	<property name="inner-classes" value="keep"/>
+	<property name="member-reorder" value="disable"/>
+
+	<property name="synthetize-methods" value="all"/>
+	<property name="synthetize-fields" value="all"/>
+
+	<property name="finalize" value="enable"/>
+
+	<property name="remove-toString" value="disable"/>
+</config>
